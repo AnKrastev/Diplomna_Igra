@@ -14,13 +14,10 @@ public class PlayerControls : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
 
-
-    private Transform cameraTransform;
     private Rigidbody rb;
+    private Transform camera;
     private Vector2 moveInput;
     private CapsuleCollider collider;
-    private const float GroundCheckDistance = 0.15f;
-    private const float GroundCheckRadius = 0.25f;
     private bool isGrounded;
 
 
@@ -28,9 +25,11 @@ public class PlayerControls : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<CapsuleCollider>();
-        rb.freezeRotation = true;
-        cameraTransform = Camera.main.transform;
+        camera = Camera.main.transform;
 
+        rb.freezeRotation = true;
+
+        //cursor in middle and hidden
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -45,8 +44,8 @@ public class PlayerControls : MonoBehaviour
 
     void PlayerRotation() 
     {
-        float cameraYaw = cameraTransform.eulerAngles.y;
-        transform.rotation = Quaternion.Euler(0f, cameraYaw, 0f);
+        //rotate the player with the camera
+        transform.rotation = Quaternion.Euler(0f, camera.eulerAngles.y, 0f);
     }
 
     void CheckGround()
@@ -65,9 +64,7 @@ public class PlayerControls : MonoBehaviour
 
     void Movement()
     {
-        float cameraYaw = cameraTransform.eulerAngles.y;
-        Quaternion yawRotation = Quaternion.Euler(0f, cameraYaw, 0f);
-        Vector3 move = yawRotation * new Vector3(moveInput.x, 0f, moveInput.y);
+        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
 
         if (move.magnitude > 0.1f)
         {
