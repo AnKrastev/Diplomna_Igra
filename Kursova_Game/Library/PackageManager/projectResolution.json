@@ -79,6 +79,16 @@
       "source": "builtin",
       "testable": false
     },
+    "com.unity.probuilder@6.0.9": {
+      "name": "com.unity.probuilder",
+      "displayName": "ProBuilder",
+      "resolvedPath": "C:\\Users\\spiri\\Desktop\\Igra_Diplomna_Rabota\\Kursova_Game\\Library\\PackageCache\\com.unity.probuilder@1f279ab829b7",
+      "fingerprint": "1f279ab829b7ed3bbe362a4beda666724eacffbf",
+      "editorCompatibility": "6000.0.0a1",
+      "version": "6.0.9",
+      "source": "registry",
+      "testable": false
+    },
     "com.unity.render-pipelines.universal@17.3.0": {
       "name": "com.unity.render-pipelines.universal",
       "displayName": "Universal Render Pipeline",
@@ -457,6 +467,16 @@
       "source": "builtin",
       "testable": false
     },
+    "com.unity.settings-manager@2.1.1": {
+      "name": "com.unity.settings-manager",
+      "displayName": "Settings Manager",
+      "resolvedPath": "C:\\Users\\spiri\\Desktop\\Igra_Diplomna_Rabota\\Kursova_Game\\Library\\PackageCache\\com.unity.settings-manager@0b8638c5ce86",
+      "fingerprint": "0b8638c5ce86009d785da17b17aaf629047f64ce",
+      "editorCompatibility": "2022.3.0a1",
+      "version": "2.1.1",
+      "source": "registry",
+      "testable": false
+    },
     "com.unity.splines@2.8.2": {
       "name": "com.unity.splines",
       "displayName": "Splines",
@@ -504,16 +524,6 @@
       "fingerprint": "aea9d3bd5e19f2a90fc3a39919974a5f3613a159",
       "editorCompatibility": "2022.3.20f1",
       "version": "2.6.2",
-      "source": "registry",
-      "testable": false
-    },
-    "com.unity.settings-manager@2.1.1": {
-      "name": "com.unity.settings-manager",
-      "displayName": "Settings Manager",
-      "resolvedPath": "C:\\Users\\spiri\\Desktop\\Igra_Diplomna_Rabota\\Kursova_Game\\Library\\PackageCache\\com.unity.settings-manager@0b8638c5ce86",
-      "fingerprint": "0b8638c5ce86009d785da17b17aaf629047f64ce",
-      "editorCompatibility": "2022.3.0a1",
-      "version": "2.1.1",
       "source": "registry",
       "testable": false
     },
