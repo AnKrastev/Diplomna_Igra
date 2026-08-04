@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 public class PlayerControls : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private float maxSpeed = 8f;
+    [SerializeField] public float maxSpeed = 8f;      
+    [SerializeField] public float sprintSpeed = 12f;
     [SerializeField] private float acceleration = 80f;
     [SerializeField] private float deceleration = 40f;
 
@@ -19,6 +20,7 @@ public class PlayerControls : MonoBehaviour
     private Vector2 moveInput;
     private CapsuleCollider collider;
     private bool isGrounded;
+    public StaminaBar _staminaController;
 
 
     void Start()
@@ -26,6 +28,7 @@ public class PlayerControls : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<CapsuleCollider>();
         camera = Camera.main.transform;
+        _staminaController = GetComponent<StaminaBar>();
 
         rb.freezeRotation = true;
 
@@ -39,6 +42,8 @@ public class PlayerControls : MonoBehaviour
         PlayerRotation();
         CheckGround();
         Movement();
+        if (_staminaController.sprinting)
+            _staminaController.Sprinting();
     }
 
 
@@ -64,6 +69,8 @@ public class PlayerControls : MonoBehaviour
 
     void Movement()
     {
+        float currentMax = _staminaController.sprinting ? sprintSpeed : maxSpeed;
+
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
 
         if (move.magnitude > 0.1f)
@@ -77,20 +84,31 @@ public class PlayerControls : MonoBehaviour
         }
 
         Vector3 horizontalVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        if (horizontalVel.magnitude > maxSpeed)
+
+        if (horizontalVel.magnitude > currentMax)
         {
-            Vector3 clamped = horizontalVel.normalized * maxSpeed;
+            Vector3 clamped = horizontalVel.normalized * currentMax;
             rb.linearVelocity = new Vector3(clamped.x, rb.linearVelocity.y, clamped.z);
         }
     }
 
+
     void OnJump(InputValue value)
     {
-        if (value.isPressed && isGrounded)
+        if (value.isPressed && isGrounded && _staminaController.StaminaJump())
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
         }
+    }
+
+    void OnRun(InputValue value)
+    {
+        Debug.Log($"OnSprint fired, isPressed={value.isPressed}");
+        if (value.isPressed)
+            _staminaController.sprinting = true;
+        else
+            _staminaController.sprinting = false;
     }
 
     void OnMove(InputValue value)
