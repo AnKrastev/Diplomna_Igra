@@ -7,10 +7,10 @@ public class StaminaBar : MonoBehaviour
     public float playerStamina = 100f;
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float jumpCost = 15f;
-    [HideInInspector] public bool regenarated = true;
+    [HideInInspector] public bool regenerated = true;
     [HideInInspector] public bool sprinting = false;
 
-    [Header("Stamina Update Paramteres")]
+    [Header("Stamina Update Parameters")]
     [Range(0f, 100f)][SerializeField] private float drain = 0.5f;
     [Range(0f, 100f)][SerializeField] private float regen = 0.5f;
 
@@ -42,7 +42,7 @@ public class StaminaBar : MonoBehaviour
                 if(playerStamina >= maxStamina)
                 {
                     playerStamina = maxStamina;
-                    regenarated = true;
+                    regenerated = true;
                 }
             }
 
@@ -76,7 +76,7 @@ public class StaminaBar : MonoBehaviour
 
     public void Sprinting() 
     {
-        if (regenarated && playerStamina > 0f)
+        if (regenerated && playerStamina > 0f)
         { 
             playerStamina -= drain * Time.deltaTime;
             UpdateStaminaUI(1);
@@ -84,7 +84,7 @@ public class StaminaBar : MonoBehaviour
             if (playerStamina <= 0f)
             {
                 playerStamina = 0f;
-                regenarated = false;
+                regenerated = false;
                 sprinting = false; 
             }
         }

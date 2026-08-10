@@ -465,8 +465,12 @@
 -analyzer:"C:/Program Files/Unity/Hub/Editor/6000.3.9f1/Editor/Data/Tools/BuildPipeline/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 -analyzer:"C:/Program Files/Unity/Hub/Editor/6000.3.9f1/Editor/Data/Tools/BuildPipeline/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll"
 "Assets/Inputs.cs"
+"Assets/Scripts/Enemy_Controller.cs"
+"Assets/Scripts/Enemy_Spawner.cs"
 "Assets/Scripts/PlayerControls.cs"
 "Assets/Scripts/StaminaBar.cs"
+"Assets/Scripts/Target_Controller.cs"
+"Assets/Scripts/Target_Spawner.cs"
 "Assets/TutorialInfo/Scripts/Readme.cs"
 -langversion:9.0
 /deterministic
