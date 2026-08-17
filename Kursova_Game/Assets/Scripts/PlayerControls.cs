@@ -5,19 +5,19 @@ using UnityEngine.InputSystem;
 public class PlayerControls : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] public float maxSpeed = 8f;      
-    [SerializeField] public float sprintSpeed = 12f;
+    [SerializeField] public float max_speed = 8f;      
+    [SerializeField] public float sprint_speed = 12f;
     [SerializeField] private float acceleration = 80f;
     [SerializeField] private float deceleration = 40f;
 
     [Header("Jump")]
-    [SerializeField] private float jumpForce = 6f;
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private float jump_force = 6f;
+    [SerializeField] private Transform ground_check;
+    [SerializeField] private LayerMask ground_layer;
 
     private Rigidbody rb;
     private Transform camera;
-    private Vector2 moveInput;
+    private Vector2 move_input;
     private CapsuleCollider collider;
     private bool isGrounded;
     public StaminaBar _staminaController;
@@ -31,10 +31,6 @@ public class PlayerControls : MonoBehaviour
         _staminaController = GetComponent<StaminaBar>();
 
         rb.freezeRotation = true;
-
-        //cursor in middle and hidden
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     void FixedUpdate()
@@ -60,7 +56,7 @@ public class PlayerControls : MonoBehaviour
         isGrounded = Physics.CheckSphere(
             feetPos,
             collider.radius + 0.05f,
-            groundLayer,
+            ground_layer,
             QueryTriggerInteraction.Ignore
         );
 
@@ -69,9 +65,9 @@ public class PlayerControls : MonoBehaviour
 
     void Movement()
     {
-        float currentMax = _staminaController.sprinting ? sprintSpeed : maxSpeed;
+        float currentMax = _staminaController.sprinting ? sprint_speed : max_speed;
 
-        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
+        Vector3 move = transform.right * move_input.x + transform.forward * move_input.y;
 
         if (move.magnitude > 0.1f)
         {
@@ -98,7 +94,7 @@ public class PlayerControls : MonoBehaviour
         if (value.isPressed && isGrounded && _staminaController.StaminaJump())
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+            rb.AddForce(Vector3.up * jump_force, ForceMode.VelocityChange);
         }
     }
 
@@ -113,6 +109,6 @@ public class PlayerControls : MonoBehaviour
 
     void OnMove(InputValue value)
     {
-        moveInput = value.Get<Vector2>();
+        move_input = value.Get<Vector2>();
     }
 }

@@ -4,9 +4,9 @@ using UnityEngine.UI;
 public class StaminaBar : MonoBehaviour
 {
     [Header("Stamina Parameters")]
-    public float playerStamina = 100f;
-    [SerializeField] private float maxStamina = 100f;
-    [SerializeField] private float jumpCost = 15f;
+    [SerializeField] private float player_stamina = 100f;
+    [SerializeField] private float max_stamina = 100f;
+    [SerializeField] private float jump_cost = 15f;
     [HideInInspector] public bool regenerated = true;
     [HideInInspector] public bool sprinting = false;
 
@@ -18,30 +18,30 @@ public class StaminaBar : MonoBehaviour
     [SerializeField] private Image staminaUI = null;
     [SerializeField] private CanvasGroup sliderGroup = null;
 
-    private PlayerControls playerControls;
-    private float maxRunSpeed;
-    private float walkSpeed;
+    private PlayerControls player_controls;
+    private float max_runSpeed;
+    private float walk_speed;
 
     private void Start()
     {
-        playerControls = GetComponent<PlayerControls>();
-        playerStamina = maxStamina;
-        maxRunSpeed = playerControls.maxSpeed;
-        walkSpeed = playerControls.maxSpeed * 0.5f;
+        player_controls = GetComponent<PlayerControls>();
+        player_stamina = max_stamina;
+        max_runSpeed = player_controls.max_speed;
+        walk_speed = player_controls.max_speed * 0.5f;
     }
 
     private void Update()
     {
         if (!sprinting) 
         {
-            if (playerStamina <= maxStamina - 0.01f) 
+            if (player_stamina <= max_stamina - 0.01f) 
             {
-                playerStamina += regen * Time.deltaTime;
+                player_stamina += regen * Time.deltaTime;
                 UpdateStaminaUI(1);
 
-                if(playerStamina >= maxStamina)
+                if(player_stamina >= max_stamina)
                 {
-                    playerStamina = maxStamina;
+                    player_stamina = max_stamina;
                     regenerated = true;
                 }
             }
@@ -51,7 +51,7 @@ public class StaminaBar : MonoBehaviour
 
     void UpdateStaminaUI(int value)
     {
-        staminaUI.fillAmount = playerStamina / maxStamina;
+        staminaUI.fillAmount = player_stamina / max_stamina ;
 
         if (value == 0)
         {
@@ -65,9 +65,9 @@ public class StaminaBar : MonoBehaviour
 
     public bool StaminaJump()
     {
-        if (playerStamina >= jumpCost)
+        if (player_stamina >= jump_cost)
         {
-            playerStamina -= jumpCost;
+            player_stamina -= jump_cost;
             UpdateStaminaUI(1);
             return true;
         }
@@ -76,14 +76,14 @@ public class StaminaBar : MonoBehaviour
 
     public void Sprinting() 
     {
-        if (regenerated && playerStamina > 0f)
+        if (regenerated && player_stamina > 0f)
         { 
-            playerStamina -= drain * Time.deltaTime;
+            player_stamina -= drain * Time.deltaTime;
             UpdateStaminaUI(1);
 
-            if (playerStamina <= 0f)
+            if (player_stamina <= 0f)
             {
-                playerStamina = 0f;
+                player_stamina = 0f;
                 regenerated = false;
                 sprinting = false; 
             }

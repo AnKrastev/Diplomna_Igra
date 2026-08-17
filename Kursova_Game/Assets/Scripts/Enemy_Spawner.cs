@@ -5,8 +5,10 @@ using System.Linq;
 public class Enemy_Spawner : MonoBehaviour
 {
     [SerializeField] private GameObject enemy_prefab;
-    [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private Transform[] spawn_points;
+    [SerializeField] private GameManager game_manager;
     private List<Transform> targets;
+
 
     void Start()
     { 
@@ -14,10 +16,11 @@ public class Enemy_Spawner : MonoBehaviour
         Debug.Log($"Targets found: {targets.Count}");
 
 
-        foreach (Transform spawnPoint in spawnPoints)
+        foreach (Transform spawnPoint in spawn_points)
         {
             GameObject enemy = Instantiate(enemy_prefab, spawnPoint.position, spawnPoint.rotation);
             Enemy_Controller enemyController = enemy.GetComponent<Enemy_Controller>();
+            enemyController.SetGameManager(game_manager);
 
             if (enemyController != null && targets.Count > 0) 
             {

@@ -127,6 +127,15 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Lunge"",
+                    ""type"": ""Button"",
+                    ""id"": ""413f9787-418d-431e-873c-407dfd24373b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -217,6 +226,17 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
                     ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0b16933e-3453-490c-a9e4-24b7c6c898d3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Lunge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -229,6 +249,7 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         m_Player_Controls_Look = m_Player_Controls.FindAction("Look", throwIfNotFound: true);
         m_Player_Controls_Jump = m_Player_Controls.FindAction("Jump", throwIfNotFound: true);
         m_Player_Controls_Run = m_Player_Controls.FindAction("Run", throwIfNotFound: true);
+        m_Player_Controls_Lunge = m_Player_Controls.FindAction("Lunge", throwIfNotFound: true);
     }
 
     ~@Inputs()
@@ -313,6 +334,7 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Controls_Look;
     private readonly InputAction m_Player_Controls_Jump;
     private readonly InputAction m_Player_Controls_Run;
+    private readonly InputAction m_Player_Controls_Lunge;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player_Controls".
     /// </summary>
@@ -340,6 +362,10 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player_Controls/Run".
         /// </summary>
         public InputAction @Run => m_Wrapper.m_Player_Controls_Run;
+        /// <summary>
+        /// Provides access to the underlying input action "Player_Controls/Lunge".
+        /// </summary>
+        public InputAction @Lunge => m_Wrapper.m_Player_Controls_Lunge;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -378,6 +404,9 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
             @Run.started += instance.OnRun;
             @Run.performed += instance.OnRun;
             @Run.canceled += instance.OnRun;
+            @Lunge.started += instance.OnLunge;
+            @Lunge.performed += instance.OnLunge;
+            @Lunge.canceled += instance.OnLunge;
         }
 
         /// <summary>
@@ -401,6 +430,9 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
             @Run.started -= instance.OnRun;
             @Run.performed -= instance.OnRun;
             @Run.canceled -= instance.OnRun;
+            @Lunge.started -= instance.OnLunge;
+            @Lunge.performed -= instance.OnLunge;
+            @Lunge.canceled -= instance.OnLunge;
         }
 
         /// <summary>
@@ -469,5 +501,12 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRun(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Lunge" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLunge(InputAction.CallbackContext context);
     }
 }

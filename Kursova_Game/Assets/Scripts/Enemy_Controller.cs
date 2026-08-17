@@ -5,10 +5,26 @@ public class Enemy_Controller : MonoBehaviour
 {
     private NavMeshAgent agent;
     private Transform target;
+    private GameManager game_manager;
 
-    public void SetTarget(Transform newTarget)
+
+    public void SetTarget(Transform new_target)
     {
-        target = newTarget;
+        target = new_target;
+    }
+
+    public void SetGameManager(GameManager manager)
+    {
+        game_manager = manager;
+    }
+
+    void OnTriggerEnter(Collider other) 
+    {
+        if(other.CompareTag("Player"))    
+        {
+            game_manager.EnemyIncrement();
+            Destroy(gameObject);
+        }
     }
 
     void Start()

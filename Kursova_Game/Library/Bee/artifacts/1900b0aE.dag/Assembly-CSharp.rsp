@@ -467,6 +467,8 @@
 "Assets/Inputs.cs"
 "Assets/Scripts/Enemy_Controller.cs"
 "Assets/Scripts/Enemy_Spawner.cs"
+"Assets/Scripts/GameManager.cs"
+"Assets/Scripts/MainMenu.cs"
 "Assets/Scripts/PlayerControls.cs"
 "Assets/Scripts/StaminaBar.cs"
 "Assets/Scripts/Target_Controller.cs"

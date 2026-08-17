@@ -6,6 +6,7 @@ public class Target_Spawner : MonoBehaviour
 {
     [SerializeField] private GameObject target_prefab;
     [SerializeField] private Transform[] target_spawnPoints;
+    [SerializeField] private GameManager game_manager;
     private List<Transform> targets;
 
     void Start()
@@ -16,6 +17,7 @@ public class Target_Spawner : MonoBehaviour
             GameObject target = Instantiate(target_prefab, spawnPoint.position, spawnPoint.rotation);
             Target_Controller targetController = target.GetComponent<Target_Controller>();
             targetController.SetRespawnPoints(target_spawnPoints);
+            targetController.SetGameManager(game_manager);
         }
     }
 }
