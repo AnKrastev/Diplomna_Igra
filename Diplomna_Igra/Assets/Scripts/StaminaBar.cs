@@ -15,8 +15,7 @@ public class StaminaBar : MonoBehaviour
     [Range(0f, 100f)][SerializeField] private float regen = 0.5f;
 
     [Header("Stamina Bar UI")]
-    [SerializeField] private Image staminaUI = null;
-    [SerializeField] private CanvasGroup sliderGroup = null;
+    [SerializeField] private Image staminaUI;
 
     private PlayerControls player_controls;
     private float max_runSpeed;
@@ -37,7 +36,7 @@ public class StaminaBar : MonoBehaviour
             if (player_stamina <= max_stamina - 0.01f) 
             {
                 player_stamina += regen * Time.deltaTime;
-                UpdateStaminaUI(1);
+                UpdateStaminaUI();
 
                 if(player_stamina >= max_stamina)
                 {
@@ -49,18 +48,9 @@ public class StaminaBar : MonoBehaviour
         }
     }
 
-    void UpdateStaminaUI(int value)
+    void UpdateStaminaUI()
     {
         staminaUI.fillAmount = player_stamina / max_stamina ;
-
-        if (value == 0)
-        {
-            sliderGroup.alpha = 0f;
-        }
-        else
-        {
-            sliderGroup.alpha = 1f;
-        }
     }
 
     public bool StaminaJump()
@@ -68,7 +58,7 @@ public class StaminaBar : MonoBehaviour
         if (player_stamina >= jump_cost)
         {
             player_stamina -= jump_cost;
-            UpdateStaminaUI(1);
+            UpdateStaminaUI();
             return true;
         }
         return false;
@@ -79,7 +69,7 @@ public class StaminaBar : MonoBehaviour
         if (regenerated && player_stamina > 0f)
         { 
             player_stamina -= drain * Time.deltaTime;
-            UpdateStaminaUI(1);
+            UpdateStaminaUI();
 
             if (player_stamina <= 0f)
             {
