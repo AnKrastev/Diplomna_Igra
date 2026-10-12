@@ -41,7 +41,6 @@ public class PlayerControls : MonoBehaviour
 
 
 
-
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -198,17 +197,18 @@ public class PlayerControls : MonoBehaviour
         {
             if (is_lunging)
             {
-                Vector3 lungeDirection = (transform.forward + Vector3.up * lunge_arc_height).normalized;
-                rb.AddForce(lungeDirection * lunge_force_per_second * lunge_timer, ForceMode.VelocityChange);
                 if (lunge_timer >= min_lunge_time)
                 {
+                    Vector3 lungeDirection = (transform.forward + Vector3.up * lunge_arc_height).normalized;
+                    rb.AddForce(lungeDirection * lunge_force_per_second * lunge_timer, ForceMode.VelocityChange);
                     StartLungeFlight();
+                    _staminaController.sprinting = false;
                 }
-                _staminaController.sprinting = false;
-                _lunge_bar.UpdateBar(0, lunge_max_duration, false);
-            }
-            is_lunging = false;
+
+            _lunge_bar.UpdateBar(0, lunge_max_duration, false);
         }
+        is_lunging = false;
+    }
     }
 
     // The lunge hitbox is only live while the lunge is in flight.
