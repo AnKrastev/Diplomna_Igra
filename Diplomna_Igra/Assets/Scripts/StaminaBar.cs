@@ -9,6 +9,7 @@ public class StaminaBar : MonoBehaviour
     [SerializeField] private float jump_cost = 15f;
     [HideInInspector] public bool regenerated = true;
     [HideInInspector] public bool sprinting = false;
+    [HideInInspector] public bool sprint_draining = false; 
 
     [Header("Stamina Update Parameters")]
     [Range(0f, 100f)][SerializeField] private float drain = 0.5f;
@@ -31,14 +32,16 @@ public class StaminaBar : MonoBehaviour
 
     private void Update()
     {
-        if (!sprinting) 
+        // Regenerate whenever stamina is not actively being drained
+        // (holding sprint while standing still no longer blocks regen).
+        if (!sprint_draining)
         {
-            if (player_stamina <= max_stamina - 0.01f) 
+            if (player_stamina <= max_stamina - 0.01f)
             {
                 player_stamina += regen * Time.deltaTime;
                 UpdateStaminaUI();
 
-                if(player_stamina >= max_stamina)
+                if (player_stamina >= max_stamina)
                 {
                     player_stamina = max_stamina;
                     regenerated = true;
@@ -50,7 +53,7 @@ public class StaminaBar : MonoBehaviour
 
     void UpdateStaminaUI()
     {
-        staminaUI.fillAmount = player_stamina / max_stamina ;
+        staminaUI.fillAmount = player_stamina / max_stamina;
     }
 
     public bool StaminaJump()
@@ -64,10 +67,10 @@ public class StaminaBar : MonoBehaviour
         return false;
     }
 
-    public void Sprinting() 
+    public void Sprinting()
     {
         if (regenerated && player_stamina > 0f)
-        { 
+        {
             player_stamina -= drain * Time.deltaTime;
             UpdateStaminaUI();
 
@@ -75,7 +78,7 @@ public class StaminaBar : MonoBehaviour
             {
                 player_stamina = 0f;
                 regenerated = false;
-                sprinting = false; 
+                sprinting = false;
             }
         }
         else
@@ -84,4 +87,3 @@ public class StaminaBar : MonoBehaviour
         }
     }
 }
-

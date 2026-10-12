@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerControls : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] public float max_speed = 8f;      
+    [SerializeField] public float max_speed = 8f;
     [SerializeField] public float sprint_speed = 12f;
     [SerializeField] private float acceleration = 80f;
     [SerializeField] private float deceleration = 5f;
@@ -26,6 +26,8 @@ public class PlayerControls : MonoBehaviour
     [SerializeField] private LungeBar _lunge_bar;
     [SerializeField] private StaminaBar _staminaController;
 
+    [SerializeField] private GameObject lunge_hitbox;
+
     private Rigidbody rb;
     private Transform camera;
     private Vector2 move_input;
@@ -36,7 +38,7 @@ public class PlayerControls : MonoBehaviour
     private float lunge_active_timer = 0f;
     private bool is_lunge_active = false;
     private bool has_left_ground = false;
-    
+
 
 
 
@@ -48,40 +50,40 @@ public class PlayerControls : MonoBehaviour
         _staminaController = GetComponent<StaminaBar>();
 
         rb.freezeRotation = true;
+
+        if (lunge_hitbox != null)
+            lunge_hitbox.SetActive(false);
     }
 
     void FixedUpdate()
     {
         PlayerRotation();
         CheckGround();
+        HandleSprintStamina();
         Movement();
-        if (_staminaController.sprinting && !is_lunging)
-            _staminaController.Sprinting();
 
-        if (is_lunging) 
+        if (is_lunging)
         {
             lunge_timer = Mathf.Min(lunge_timer + Time.fixedDeltaTime, lunge_max_duration);
             _lunge_bar.UpdateBar(lunge_timer, lunge_max_duration, true);
         }
 
-        if (is_lunge_active) 
+        if (is_lunge_active)
         {
             lunge_active_timer += Time.fixedDeltaTime;
-            if (!isGrounded) 
+            if (!isGrounded)
             {
                 has_left_ground = true;
             }
-            else if (has_left_ground || lunge_active_timer >= lunge_active_timeout) 
+            else if (has_left_ground || lunge_active_timer >= lunge_active_timeout)
             {
-                is_lunge_active = false;
-                has_left_ground = false;
-                lunge_active_timer = 0f;
+                EndLungeFlight();
             }
         }
     }
 
 
-    void PlayerRotation() 
+    void PlayerRotation()
     {
         //rotate the player with the camera
         transform.rotation = Quaternion.Euler(0f, camera.eulerAngles.y, 0f);
@@ -97,6 +99,17 @@ public class PlayerControls : MonoBehaviour
             ground_layer,
             QueryTriggerInteraction.Ignore
         );
+    }
+
+    void HandleSprintStamina()
+    {
+        bool is_moving = move_input.sqrMagnitude > 0.01f;
+        bool draining = _staminaController.sprinting && is_moving && !is_lunging && !is_lunge_active;
+
+        _staminaController.sprint_draining = draining;
+
+        if (draining)
+            _staminaController.Sprinting();
     }
 
     void Movement()
@@ -122,17 +135,17 @@ public class PlayerControls : MonoBehaviour
         {
             rb.AddForce(move.normalized * acceleration * Time.fixedDeltaTime, ForceMode.VelocityChange);
         }
-        else if(!is_lunge_active)
+        else if (!is_lunge_active)
         {
             Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(-flatVel * deceleration * Time.fixedDeltaTime, ForceMode.VelocityChange);
         }
 
-        if (!is_lunge_active) 
+        if (!is_lunge_active)
         {
             Vector3 horizontalVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
-            if(horizontalVel.magnitude > currentMax)
+            if (horizontalVel.magnitude > currentMax)
             {
                 Vector3 clamped = horizontalVel.normalized * currentMax;
                 rb.linearVelocity = new Vector3(clamped.x, rb.linearVelocity.y, clamped.z);
@@ -143,7 +156,7 @@ public class PlayerControls : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-        if (is_lunging) 
+        if (is_lunging)
         {
             return;
         }
@@ -155,7 +168,7 @@ public class PlayerControls : MonoBehaviour
                 rb.AddForce(Vector3.up * jump_force, ForceMode.VelocityChange);
             }
         }
-        
+
     }
 
     void OnRun(InputValue value)
@@ -181,21 +194,41 @@ public class PlayerControls : MonoBehaviour
                 lunge_timer = 0f;
             }
         }
-        else 
+        else
         {
-            if(is_lunging)
+            if (is_lunging)
             {
                 Vector3 lungeDirection = (transform.forward + Vector3.up * lunge_arc_height).normalized;
                 rb.AddForce(lungeDirection * lunge_force_per_second * lunge_timer, ForceMode.VelocityChange);
                 if (lunge_timer >= min_lunge_time)
                 {
-                    is_lunge_active = true;
-                    lunge_active_timer = 0f;
+                    StartLungeFlight();
                 }
                 _staminaController.sprinting = false;
                 _lunge_bar.UpdateBar(0, lunge_max_duration, false);
             }
             is_lunging = false;
         }
+    }
+
+    // The lunge hitbox is only live while the lunge is in flight.
+    void StartLungeFlight()
+    {
+        is_lunge_active = true;
+        has_left_ground = false;
+        lunge_active_timer = 0f;
+
+        if (lunge_hitbox != null)
+            lunge_hitbox.SetActive(true);
+    }
+
+    void EndLungeFlight()
+    {
+        is_lunge_active = false;
+        has_left_ground = false;
+        lunge_active_timer = 0f;
+
+        if (lunge_hitbox != null)
+            lunge_hitbox.SetActive(false);
     }
 }
