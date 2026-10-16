@@ -211,7 +211,7 @@ public class PlayerControls : MonoBehaviour
     }
     }
 
-    // The lunge hitbox is only live while the lunge is in flight.
+    
     void StartLungeFlight()
     {
         is_lunge_active = true;
