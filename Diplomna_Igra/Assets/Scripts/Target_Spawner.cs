@@ -8,12 +8,15 @@ public class Target_Spawner : MonoBehaviour
     [SerializeField] private GameObject target_prefab;
     [SerializeField] private Transform[] target_spawnPoints;
     [SerializeField] private GameManager game_manager;
+    [SerializeField] private int spawned_targets = 4;
 
     void Start()
     {
         HashSet<Transform> occupied = new HashSet<Transform>();
 
-        foreach (Transform spawnPoint in target_spawnPoints.Take(4))
+        IEnumerable<Transform> start_points = target_spawnPoints.OrderBy(x => Random.value).Take(spawned_targets);
+
+        foreach (Transform spawnPoint in start_points)
         {
             GameObject target = Instantiate(target_prefab, spawnPoint.position, spawnPoint.rotation);
             Target_Controller targetController = target.GetComponent<Target_Controller>();
